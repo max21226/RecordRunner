@@ -292,6 +292,9 @@ static GameLayer *sharedGameLayer;
     }
 
     [self schedule: @selector(update:)]; */
+    
+//    [gameObjectInjector injectObjectToTrack:0 atAngle:45 gameObjectType:COIN_TYPE effectType:kRotation];
+
 	return self;
 }
 
@@ -327,8 +330,6 @@ static GameLayer *sharedGameLayer;
 // -----------------------------------------------------------------------------------
 - (void) update:(ccTime) dt
 {
-
-    [player showNextFrame];
    
     // generate Game Objectsrandomly
     if (arc4random() % RANDOM_MAX <= coinSpawnRate) {
@@ -376,7 +377,7 @@ static GameLayer *sharedGameLayer;
     [_highScore showNextFrame];
     */
     // check if new Power up has been triggered
-    [self triggerPowerIcons];
+//    [self triggerPowerIcons];
     
     // update all PowerIcons
     for (int trackNum = 0; trackNum < MAX_NUM_TRACK; ++trackNum) {
@@ -392,6 +393,8 @@ static GameLayer *sharedGameLayer;
             [POOL_OBJS_ON_TRACK(_powerPool, trackNum)[i] runPower];
         }
     }
+    
+    [player showNextFrame];
 }
 
 -(float) changeGameAngularVelocityByDegree:(float) byDegree
@@ -768,5 +771,29 @@ static GameLayer *sharedGameLayer;
         }
         
     }
+}
+
+-(bool) getIsHitStateByTrackNum:(int) trackNum
+{
+    return ((trackNum < MAX_NUM_TRACK)?isTrackHit[trackNum]:NO);
+}
+
+-(void) setIsHitStateByTrackNum:(int) trackNum toState:(bool) state
+{
+    if (trackNum < MAX_NUM_TRACK) {
+        isTrackHit[trackNum] = state;
+    }
+}
+
+-(void) setHittingObjByTrackNum:(int) trackNum hittingObj:(id) obj
+{
+    if (trackNum < MAX_NUM_TRACK) {
+        whatHitTrack[trackNum] = obj;
+    }
+}
+
+-(id) getHittingObjByTrackNum:(int) trackNum
+{
+    return ((trackNum < MAX_NUM_TRACK)?whatHitTrack[trackNum]:nil);
 }
 @end

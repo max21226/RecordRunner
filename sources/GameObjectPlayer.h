@@ -10,6 +10,7 @@
 #import "common.h"
 #import "GameObjectBase.h"
 #import "CCBAnimationManager.h"
+//#import "GameLayer.h"
 #define kPlayerRadialSpeed 32
 #define kPlayerHitBoxSegmentWidth kPlayerSpeed
 

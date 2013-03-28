@@ -51,6 +51,8 @@ typedef enum {
 @interface GameLayer : CCLayer
 {
 //    GameObjectPlayer *player;
+    BOOL isTrackHit[MAX_NUM_TRACK];
+    id whatHitTrack[MAX_NUM_TRACK];
 }
 
 + (GameLayer *) sharedGameLayer;
@@ -109,7 +111,10 @@ typedef enum {
 -(int) getBombSpawnRate;
 -(int) getShieldSpawnRate;
 -(void) cleanUpPlayField;
-
+-(bool) getIsHitStateByTrackNum:(int) trackNum;
+-(void) setIsHitStateByTrackNum:(int) trackNum toState:(bool) state;
+-(void) setHittingObjByTrackNum:(int) trackNum hittingObj:(id) obj;
+-(id) getHittingObjByTrackNum:(int) trackNum;
 @property (nonatomic, strong) GameObjectPlayer *player;
 @property (nonatomic, strong) Queue * coinFreePool;
 @property (nonatomic, strong) Queue * coinUsedPool;
@@ -126,6 +131,7 @@ typedef enum {
 @property (nonatomic, assign) int coinSpawnRate;
 @property (nonatomic, assign) int shieldSpawnRate;
 @property (nonatomic, assign) BOOL isDebugMode;
+
 /*
 @property (nonatomic, strong) CCSprite *background;
 @property (nonatomic, strong) Score * score;

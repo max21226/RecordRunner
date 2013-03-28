@@ -27,25 +27,14 @@
 // -----------------------------------------------------------------------------------
 - (void) showNextFrame
 {
-/*    static int direction_factor = -1;
-    if (self.position.x >= 0)
-    {
-        [self setPosition:ccp(self.position.x + direction_factor, self.position.y)];
-    }
-    
-    if (self.position.x == 0)
-    {
-        direction_factor = 1;
-    }
-    
-    if (self.position.x == COMMON_SCREEN_CENTER_X)
-    {
-        direction_factor = -1;
-    }
- */
-
+    int track_num;
     if ([GameLayer sharedGameLayer].isDebugMode == YES)
         return;
+
+    if ([[GameLayer sharedGameLayer] getIsHitStateByTrackNum:TRACKNUM_FROM_RADIUS] == YES)
+    {
+        [[[GameLayer sharedGameLayer] getHittingObjByTrackNum:TRACKNUM_FROM_RADIUS] handleCollision];
+    }
     
     if (self.playerRadialSpeed == 0)
     {
@@ -77,10 +66,10 @@
 //        NSLog(@"self.angleRotated = %d",self.angleRotated);        
     }
     else
-    {
-        // Move the player along the radial direction
+    {   
         self.radius = self.radius + (self.playerRadialSpeed * self.direction);
-        
+
+
         if (self.radius > PLAYER_RADIUS_OUTER_MOST)
         {
             self.radius = PLAYER_RADIUS_OUTER_MOST;
@@ -90,8 +79,7 @@
         {
             self.radius = 0;
         }
-        
-        
+
         [self moveTo:COMMON_GET_NEW_RADIAL_POINT(COMMON_SCREEN_CENTER,
                                                  self.radius,
                                                  self.angleRotated)];
@@ -110,9 +98,13 @@
                                                                     self.radius,
                                                                     self.angleRotated);
         }
-        
     }
     
+    // Reset the isHit array to prepare for the next frame comparison
+    for (track_num = 0; track_num < MAX_NUM_TRACK; track_num++) {
+        [[GameLayer sharedGameLayer] setIsHitStateByTrackNum:track_num toState:NO];
+        [[GameLayer sharedGameLayer] setHittingObjByTrackNum:track_num hittingObj:nil];
+    }
 }
 
 // -----------------------------------------------------------------------------------
@@ -199,6 +191,9 @@
 {
     direction = (direction == kMoveInToOut) ? kMoveOutToIn : kMoveInToOut;
     self.playerRadialSpeed = kPlayerRadialSpeed;
+    if (direction == kMoveInToOut) {
+        self.radius = COMMON_GRID_WIDTH/2;
+    }
     playerBoundingPath = nil;
     playerBoundingPath = self.PlayerBoundingPathCrossing;
 }
