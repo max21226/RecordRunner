@@ -34,7 +34,7 @@
 @implementation BuyPowerupMenu
 @synthesize coinCountLabel;
 @synthesize buyCoinsMenu;
-@synthesize button_top_green;
+//@synthesize button_top_green;
 @synthesize WarningLabel;
 
 
